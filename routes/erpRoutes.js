@@ -14,8 +14,6 @@ router.get('/reports/audit-logs', reportController.getAuditLogs);
 router.get('/reports/owner-metrics', reportController.getOwnerMetrics);
 router.get('/inventory/search', inventoryController.searchInvoices); 
 router.get('/invoices/search', inventoryController.searchInvoices); 
-
-
 router.get(
   '/bills/all',
   billingController.getAllInvoices
