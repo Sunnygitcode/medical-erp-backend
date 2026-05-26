@@ -20,12 +20,19 @@ exports.searchInvoices = async (req, res) => {
       const endOfDay = new Date(date);
       endOfDay.setUTCHours(23, 59, 59, 999);
 
-      queryConditions.createdAt = { $gte: startOfDay, $lte: endOfDay };
+      if (Object.keys(queryConditions).length > 0) {
+        queryConditions.$or = [
+          { saleDate: { $gte: startOfDay, $lte: endOfDay } },
+          { createdAt: { $gte: startOfDay, $lte: endOfDay } }
+        ];
+      } else {
+        queryConditions.saleDate = { $gte: startOfDay, $lte: endOfDay };
+      }
     }
 
     const results = await Invoice.find(queryConditions)
       .populate('soldItems.medicineId')
-      .sort({ createdAt: -1 });
+      .sort({ saleDate: -1 });
 
     res.json(results);
   } catch (err) {
